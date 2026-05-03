@@ -1,14 +1,16 @@
-# Rust in a Day: Basics + Concurrency
+# Rust in a Day: Basics + Concurrency (for Python developers)
 
-A practical, example-driven curriculum that takes a programmer from zero Rust
-to confidently writing concurrent Rust in **8 focused hours**. Each hour is a
-runnable, commented program you read, run, then modify.
+A practical, example-driven curriculum that takes a **Python programmer** from
+zero Rust to confidently writing concurrent Rust in **8 focused hours**.
+Every module includes side-by-side Python ↔ Rust comparisons so your existing
+intuition does the heavy lifting.
 
 ## Who this is for
 
-You already program in another language (Python, Go, Java, TS, C++…). You
-want to (a) be productive in Rust quickly and (b) understand what makes
-Rust's concurrency story unique.
+You write Python every day (Django/FastAPI/data tooling/scripts). You've heard
+Rust is fast and "memory-safe", but you've bounced off the borrow checker
+once already. This curriculum meets you where you are: each concept starts
+with "here's how you'd do it in Python" before showing the Rust version.
 
 ## How to use this repo
 
@@ -17,35 +19,46 @@ Rust's concurrency story unique.
    ```
    cargo run --example h1_basics
    ```
-3. Read the file end-to-end **before** running. Then run, then do the
-   `// EXERCISE:` blocks at the bottom of each file. Don't skip exercises —
-   the borrow checker only teaches you when it yells at you.
+3. Read the file end-to-end **before** running. Every module starts with a
+   "Python ↔ Rust at a glance" cheat sheet. Then run, then do the
+   `// EXERCISE:` blocks at the bottom. Don't skip exercises — the borrow
+   checker only teaches you when it yells at you.
 
 ## Schedule
 
-| Hour | Topic                                            | File                       |
-|------|--------------------------------------------------|----------------------------|
-| 1    | Tooling, syntax, variables, control flow         | `h1_basics.rs`             |
-| 2    | Ownership, borrowing, lifetimes                  | `h2_ownership.rs`          |
-| 3    | Structs, enums, pattern matching, `Option`/`Result` | `h3_types.rs`           |
-| 4    | Collections, iterators, error handling           | `h4_collections.rs`        |
-| 5    | Traits, generics, closures                       | `h5_traits.rs`             |
-| 6    | Threads, `Send`/`Sync`, `Arc`, `Mutex`           | `h6_threads.rs`            |
-| 7    | Channels, scoped threads, data parallelism       | `h7_channels.rs`           |
-| 8    | `async`/`await`, Tokio, capstone                 | `h8_async.rs`              |
+| Hour | Topic                                              | Python analog                      | File                       |
+|------|----------------------------------------------------|------------------------------------|----------------------------|
+| 1    | Tooling, syntax, variables, control flow           | basic syntax, `for`/`while`/`if`   | `h1_basics.rs`             |
+| 2    | Ownership, borrowing, lifetimes                    | references, GC, mutability         | `h2_ownership.rs`          |
+| 3    | Structs, enums, pattern matching, `Option`/`Result` | dataclasses, `match`, `None`, exceptions | `h3_types.rs`        |
+| 4    | Collections, iterators, error handling             | `list`/`dict`/`set`, comprehensions, try/except | `h4_collections.rs` |
+| 5    | Traits, generics, closures                         | `Protocol`, generics, lambdas      | `h5_traits.rs`             |
+| 6    | Threads, `Send`/`Sync`, `Arc`, `Mutex`             | `threading`, GIL, `Lock`           | `h6_threads.rs`            |
+| 7    | Channels, scoped threads, data parallelism         | `queue.Queue`, `multiprocessing.Pool` | `h7_channels.rs`        |
+| 8    | `async`/`await`, Tokio, capstone                   | `asyncio`, `aiohttp`               | `h8_async.rs`              |
 
-Each file is ~150 lines: ~80 lines of explanation/code, ~70 lines of
-exercises and hints.
+## The Big Three "wait, what?" moments for Python users
+
+1. **Variables are immutable by default.** `let x = 5;` is more like Python's
+   `x: Final[int] = 5`. You opt into mutation with `let mut x = 5;`.
+2. **No `None` — but there's `Option<T>`.** Same idea, but the type system
+   *forces* you to handle the `None` case before you can use the value.
+   Goodbye `AttributeError: 'NoneType' object has no attribute …`.
+3. **Ownership replaces the GC.** Every value has exactly one owner; when
+   the owner goes out of scope, the value is freed. There is no garbage
+   collector. The compiler enforces this at compile time, which is also
+   what makes Rust thread-safe by default.
 
 ## Learning principles applied
 
-- **One concept per hour.** You'll review the previous hour's exercise at
-  the start of the next.
+- **One concept per hour.** Each lesson builds on the previous one.
 - **Compile-driven learning.** Every example deliberately includes commented
   code that *won't* compile, so you can uncomment and read the error.
+  Reading errors is the #1 Rust skill, and Rust's errors are unusually
+  good — they often suggest the fix.
 - **Concurrency on a foundation.** We do not touch threads until ownership
-  is solid. The borrow checker is what makes Rust's concurrency safe; it has
-  to land first.
+  is solid. The borrow checker is what makes Rust's concurrency safe, and
+  it has to land first.
 - **Real APIs only.** Every concurrency primitive shown (`std::thread`,
   `std::sync`, `mpsc`, `rayon`, `tokio`) is what you would actually use in
   production.
@@ -73,4 +86,5 @@ exercises and hints.
 
 A concurrent web crawler that fetches a list of URLs, parses titles, and
 respects a max-concurrency limit using a `tokio::sync::Semaphore`. ~60 lines.
-It exercises ownership, traits, error handling, async, and shared state.
+This is the Rust equivalent of `asyncio.gather` with a `Semaphore` —
+you'll recognize the shape, but the safety guarantees are stronger.
